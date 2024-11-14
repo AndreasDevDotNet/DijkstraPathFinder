@@ -29,7 +29,7 @@ if(result.HasReachedTheGoal)
 {
     DrawMaze(maze, result.SeenLocations);
     Console.WriteLine();
-    Console.WriteLine($"Shortest path was {result.NumberOfSteps} steps.");
+    Console.WriteLine($"Shortest path was {result.NumberOfSteps} steps, {result.SeenLocations.Count} locations was visted.");
 }
 else
 {
@@ -80,46 +80,60 @@ static PathFindResult TraverseMaze(string[,] maze, (int y, int x) startPosition,
 
 static void DrawMaze(string[,] mazeArr, HashSet<(int y, int x)> seenLocations = null)
 {
-    //Console.Write("  ");
-    //for (int i = 0; i < mazeArr.GetLength(1); i++)
-    //{
-    //    Console.Write($"{i}");
+    Console.Write("   ");
+    for (int i = 0; i < mazeArr.GetLength(1); i++)
+    {
+        if (i < 10)
+        {
+            Console.Write($"{i} "); 
+        }
+        else
+        {
+            Console.Write($"{i}");
+        }
 
-    //}
-    //Console.WriteLine();
+    }
+    Console.WriteLine();
     for (int y = 0; y < mazeArr.GetLength(0); y++)
     {
         for (int x = 0; x < mazeArr.GetLength(1); x++)
         {
-            //if (x == 0)
-            //{
-            //    if (y < 10)
-            //    {
-                    if (seenLocations != null && seenLocations.Contains((y,x)))
+            if (x == 0)
+            {
+                if (y < 10)
+                {
+                    if (seenLocations != null && seenLocations.Contains((y, x)))
                     {
-                        Console.Write($"0");  
-                    } 
+                        Console.Write($"{y}  0");
+                    }
                     else
                     {
-                        Console.Write($"{mazeArr[y, x]}");
+                        Console.Write($"{y}  {mazeArr[y, x]}");
+                    } 
+                }
+                else
+                {
+                    if (seenLocations != null && seenLocations.Contains((y, x)))
+                    {
+                        Console.Write($"{y} 0");
                     }
-            //    }
-            //    else
-            //    {
-            //        Console.Write($"{y} ");
-            //    }
-            //}
-            //else
-            //{
-            //    if (x < 10)
-            //    {
-            //        Console.Write($"{mazeArr[y, x]}"); 
-            //    }
-            //    else
-            //    {
-            //        Console.Write($"{mazeArr[y,x]} ");
-            //    }
-            //}
+                    else
+                    {
+                        Console.Write($"{y} {mazeArr[y, x]}");
+                    }
+                }
+            }
+            else 
+            { 
+                if (seenLocations != null && seenLocations.Contains((y, x)))
+                {
+                    Console.Write($" 0");
+                }
+                else
+                {
+                    Console.Write($" {mazeArr[y, x]}");
+                } 
+            }
         }
         Console.WriteLine();
     }
@@ -139,8 +153,6 @@ static string[,] GenerateMaze(int width, int height, int magicNumber)
 
     return mazeArr;
 }
-
-
 
 static bool IsOpen(int y, int x, int magicNumber)
 {
